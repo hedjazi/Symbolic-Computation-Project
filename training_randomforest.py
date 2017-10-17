@@ -22,3 +22,7 @@ for train_index, val_index in kf.split(X_train):
     target_names = ['class 0', 'class 1', 'class 2']
     print classification_report(Yval, Y_estimated, target_names=target_names)
     iteration += 1
+
+Y_estimated = clf.predict(X_test)
+target_names = ['class 0', 'class 1', 'class 2']
+print classification_report(Y_test, Y_estimated, target_names=target_names)
