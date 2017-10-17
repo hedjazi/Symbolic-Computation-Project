@@ -1,8 +1,5 @@
 import numpy as np
 
-def transpose(matrix):
-    return np.transpose( matrix )
-
 def array_to_matrix(arr):
     matrix = []
     i = 0
@@ -23,12 +20,20 @@ def generate_data_as_array(size, length):
     np.random.shuffle( mat )
     return mat
 
+def count_minus(coefs):
+    count = 0
+    for coef in coefs:
+        if coef < 0:
+            count+=1
+    return count
+
 if __name__ == "__main__":
     size = 100000
-    length = 5
+    length = 4
     mat = generate_data_as_array(size, length)
     matrix = array_to_matrix( mat )
     matrix = np.array( matrix, dtype=int )
+    
     X = []
     Y = []
     for coefs in matrix:
@@ -42,7 +47,15 @@ if __name__ == "__main__":
             y = 1
         else:
             y = 2
-        X.append(coefs)
+        arr = [i for i in coefs]
+        for i in coefs:
+            if i<0:
+                arr.append(0)
+            else:
+                arr.append(1)
+        arr.append( count_minus( coefs ) ) # negatives
+        arr.append( 3 - count_minus( coefs ) ) # positives
+        X.append(arr)
         Y.append(y)
-    np.save('X.npy', X)
-    np.save('Y.npy', Y)
+    np.save('X_additional_position.npy', X)
+    np.save('Y_additional_position.npy', Y)
