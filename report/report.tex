@@ -1,0 +1,358 @@
+\documentclass[a4paper,UKenglish]{lipics-v2016}
+%This is a template for producing LIPIcs articles.
+%See lipics-manual.pdf for further information.
+%for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
+%for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
+% for section-numbered lemmas etc., use "numberwithinsect"
+
+\usepackage{microtype}%if unwanted, comment out or use option "draft"
+
+%\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
+
+\bibliographystyle{plainurl}% the recommended bibstyle
+
+% Author macros::begin %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Predicting the Number of Real Roots for N-Degree Polynomials}
+\titlerunning{Predicting the Number of Real Roots} %optional, in case that the title is too long; the running title should fit into the top page column
+
+%% Please provide for each author the \author and \affil macro, even when authors have the same affiliation, i.e. for each author there needs to be the  \author and \affil macros
+\author[1]{John Q. Open}
+\author[2]{Joan R. Access}
+\affil[1]{Dummy University Computing Laboratory, Address/City, Country\\
+  \texttt{open@dummyuniversity.org}}
+\affil[2]{Department of Informatics, Dummy College, Address/City, Country\\
+  \texttt{access@dummycollege.org}}
+\authorrunning{J.\,Q. Open and J.\,R. Access} %mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
+
+% \Copyright{John Q. Open and Joan R. Access}%mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+
+\subjclass{I.1.0, I.2.6}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation".
+\keywords{Solving polynomial; Machine Learning; Deep Neural Network; Random Forest; Regression ; Classification; PCA.}% mandatory: Please provide 1-5 keywords
+% Author macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\EventEditors{Zafeirakis Zafeirakopoulos}
+\EventNoEds{1}
+\EventLongTitle{Symbolic Computation @ Gebze Technical University}
+\EventShortTitle{SC @ GTU}
+\EventAcronym{SC @ GTU}
+\EventYear{2017}
+\EventDate{December, 2017}
+\EventLocation{Gebze, Turkey}
+% \EventLogo{}
+\SeriesVolume{1}
+\ArticleNo{1}
+% Editor-only macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    In this project we aim to predict the number of solutions for a given polynomial using ML methods.
+    The project has mainly two parts, in the former one we aim to predict the number of solutions
+    for a polynomial of the second degree using different classifiers like Random Forest, SVM and Deep neural network,
+    furthermore, in the later part we aim to generalize the prediction of number of solution to higher degree (100 Degree).
+    In other words in the second part, we transform the classification problem to a regression problem
+    to predict the number of real solutions, single solutions and multiple solutions.
+    To achieve this aim we have tried different experiments using Deep neural networks.
+ \end{abstract}
+
+
+ \section{Introduction\label{section1}}
+
+
+ Machine learning is a branch of artificial intelligence, concerned with the design and development of algorithms that are able to improve their behavior based on empirical data. The empirical data take a form of examples that illustrate relations between observed variables. A major focus of machine learning research is to automatically learn to recognize patterns in the examples and make intelligent decisions.
+ A large part of machine learning deals with the task of modeling and building predictive models. These models predict the value of a dependent variable from the values of independent variables, also referred to as predictors. Predictive modeling problems can be divided into classification and regression problems. In the formers problems we are predicting the values of a categorical (discrete) output variable. There are a number of methods for solving classification  among them we have chosen  Random Forest, SVM and Deep neural network to train our data.   In second type of Machine Learning problems (regression problems) we are predicting the value of a continuous variable from one or more continuous or categorical variables. We have done this part using Deep Neural network. Machine learning methods have been successfully used in many applications For example, in speech recognition, facial recognition and detection of disease in medical diagnosis.
+
+ In the other hand, solving a polynomial, predicting its number of solution, predicting the nature of each solution, are solvable things, a lot of algebraic methods have proposed to address them in the literature. The general technique for solving bigger-than-quadratic polynomials is pretty applied however, solving these problems in fixed time is a big challenge. In other words, when we have a data set which contains big number of high degrees polynomials, the process can be time-consuming. In this project we are aiming to apply Machine Learning methods to predict the number of solutions for a given polynomial in constant time.
+
+ The rest of this paper is organized as follows: Section~\ref{section2} define the method that we have used for predicting the number of solutions for polynomials of 2nd degree and its result. Section~\ref{section3} describes all the steps for predicting the number of solutions for N degree polynomials , Section~\ref{section4} shows the experiements and the results that we found until now. Finally, Section~\ref{section5} provides a conclusion and direction for the remain work.
+
+
+ \section{Predicting the number of solutions for polynomials of 2nd degree \label{section2}}
+ In the beginning of the project we have chosen to start with a simple problem, we aimed to predict the number of solution for polynomials of second degree, so our problem in this project is a supervised learning problem which can be solved using Machine Learning. It infers a function from data labeled with the corresponding correct outputs and then it can be used on new examples. Each example is a pair consisting of a set of input variables and a desired output value. To achieve a good accuracy for our classification problem we did the following steps:
+
+ \subsection{DataSet generation\label{data}}
+
+ In the first time, we generated random coefficients (a, b and c) from normal distribution, this  coefficients are different in  both sign and scale, we did all the possible combinations to cover a large domain. Once we did this, we solved the given polynomial using the discriminant formula, later we assigned it a class which represents its number of solutions (0 if it does not have a solution in real number interval, 1 if it has one multiple solution and 2 if it has two different solutions).
+
+ \subsection{Cross vaidation\label{cross validation}}
+ In the first part of the project, we have chosen the most widely used method for validate our model which is cross-validation. Ideally, given enough data, a validation set can be set aside and used to assess the performance of our prediction model. Since data are often scarce, this is usually not possible. To solve this problem of data scarcity, K-fold cross-validation uses a part of the available data to fit the model, and a different part of it for test. The data is split into K roughly equal-sized parts. We used 10-Fold crossvalidation in our case. In each time we are chosing one of the fold for the validation task and the other folds (9 folds) are using for the training.
+
+ \subsection{Classification Task\label{classification}}
+ \subsubsection{SVM\label{svm}}
+ The SVM is a very popular ML technique. It is a supervised learning method used for classification and regression in our case we have used them for the classification task. In the classification task, input data are called training data and each is marked as belonging to one of K classes. The SVM training model maps the data into a higher-dimensional space where the K classes are separated by a hyperplane. This higher-dimensional space is called the transformed feature space, as opposed to the input space occupied by the training instances. The goal of the SVM model is to maximise the gap between the separating
+ hyperplane and so that the expected generalisation error is minimised. Since SVM methods are binary, and we have three classes we used one vs all approach which is trained to distinguish one class from the remaining two classes. We have also tested both the linear SVM and Kernel methods (polynomial and RBF). SVM did not give a high accuracy (less than 56 percent), see Table \ref{table:characteristics1}.
+ \begin{table}
+ \caption{Results of SVM }
+ \small
+ \begin{center}
+ \setlength{\tabcolsep}{0.8em}
+ \renewcommand{\arraystretch}{1.5}
+ \begin{tabular}{|p{1.5cm}|p{1cm}|}
+ \hline
+ {Type } & {Accuracy}  \\
+ \hline
+ Linear & 0.51\\
+ \hline
+ RBF & 0.55\\
+ \hline
+ Polynomial & 0.56\\
+ \hline
+ \end{tabular}
+ \end{center}
+ \label{table:characteristics1}
+ \vspace{-5mm}
+ \end{table}
+
+ \subsubsection{Random Forest\label{random forest}}
+ Random Forest (RF) is an ML algorithm Based on Decision Trees. Random Trees lies in one of those classes of ML Algorithms which does 'Ensemble' classification. The main principle behind ensemble methods is that a group of weak learners can come together to form a strong learner. It has gained a significant interest in the recent past, due to its quality performance in several areas. In RF we make a prediction about the class, not simply based on One Decision Trees, but by an (almost) un-animous prediction, made by 'K' Decision Trees.  After we did a hyper parameter tuning we found that using 18 Decision Trees gave us the highest accuracy (0.99 for the precesion, recall and F1-score), see Table \ref{table:characteristics2} and Table \ref{table:characteristics3}.
+
+ \begin{table}
+ \caption{Results of Random Forest for validation set }
+ \small
+ \begin{center}
+ \setlength{\tabcolsep}{0.8em}
+ \renewcommand{\arraystretch}{1.5}
+ \begin{tabular}{|p{1cm}|p{ 1cm}|p{1cm}|p{1.5cm}|p{1.5cm}|}
+ \hline
+ {Class} & {Precesion}  & {Recall} & {f1-score}& {Number of sampeles}\\
+ \hline
+ Class0 & 0.99 & 0.99 & 0,99 & 17777\\
+ \hline
+ Class1 & 1 & 0.90 & 0,95 & 50\\
+ \hline
+ Class2 & 1 & 1  & 1& 45173\\
+ \hline
+ avg/Tolat & 1 & 1  & 1 & 63000\\
+ \hline
+ \end{tabular}
+ \end{center}
+ \label{table:characteristics2}
+ \vspace{-5mm}
+ \end{table}
+
+
+ \begin{table}
+ \caption{Results of Random Forest for test set}
+ \small
+ \begin{center}
+ \setlength{\tabcolsep}{0.8em}
+ \renewcommand{\arraystretch}{1.5}
+ \begin{tabular}{|p{1cm}|p{ 1cm}|p{1cm}|p{1.5cm}|p{1.5cm}|}
+ \hline
+ {Class} & {Precesion}  & {Recall} & {f1-score}& {Number of sampeles}\\
+ \hline
+ Class0 & 0.99 & 0.99 & 0,99 & 19758\\
+ \hline
+ Class1 & 0.98& 0.98 & 0,98 & 46\\
+ \hline
+ Class2 & 1 & 1  & 1& 50196\\
+ \hline
+ avg/Tolat & 1 & 1  & 1 & 70000\\
+ \hline
+ \end{tabular}
+ \end{center}
+ \label{table:characteristics3}
+ \vspace{-5mm}
+ \end{table}
+ \subsubsection{Deep Neural Network\label{deep}}
+ Neural Networks help us cluster and classify. You can think of them as a clustering and classification layer on top of data you store and manage. They help to group unlabeled data according to similarities among the example inputs, and they classify data when they have a labeled dataset to train on. To be more precise, neural networks extract features that are fed to other algorithms for clustering and classification; we can think of deep neural networks as components of larger ML applications involving algorithms for reinforcement learning, classification and regression. To train our models, we are using Keras in top of TensorFlow. We did a lot of expirements to define the best values of hyperparameters, including those which specify the structure of the network itself (preprocessing the input Data, number of hidden layers and the number of neurones) and those which determine how the network is trained such as the learning Rate and the number of epochs.
+
+ \begin{table}
+ \caption{Results of Deep Neural Network for validation set without data augmentation}
+ \small
+ \begin{center}
+ \setlength{\tabcolsep}{0.8em}
+ \renewcommand{\arraystretch}{1.5}
+ \begin{tabular}{|p{1cm}|p{ 1cm}|p{1cm}|p{1.5cm}|p{1.5cm}|}
+ \hline
+ {Class} & {Precesion}  & {Recall} & {f1-score}& {Number of sampeles}\\
+ \hline
+ Class0 & 0.99 & 0.89 & 0,94 & 17777\\
+ \hline
+ Class1 & 0 & 0 & 0 & 50\\
+ \hline
+ Class2 & 0.96 & 1  & 0.98 & 45173\\
+ \hline
+ avg/Tolat & 0.96 & 0.96 & 0.96 & 63000\\
+ \hline
+ \end{tabular}
+ \end{center}
+ \label{table:characteristics4}
+ \vspace{-5mm}
+ \end{table}
+ \subsubsection{Data augmentation for Deep Neural Netwoek\label{generation}}
+
+ When we have trained our Deep Neural Network classifiers in the first time, we did not get good accuracy in the second class Table \ref{table:characteristics4} (one multiple solution) like Random Forest classifier, because the number of examples of this class is smaller than the others, which does not allow the Deep Neural Netwoek to fit our data, to bypass this problem, we did a data augmentation process, in other words we added new samples of this class to the main data set to improve the accuracy of the classifiers, see Table \ref{table:characteristics5} and Table \ref{table:characteristics6}.
+
+ \begin{table}
+ \caption{Results of Deep Neural Network for validation set with data augmentation}
+ \small
+ \begin{center}
+ \setlength{\tabcolsep}{0.8em}
+ \renewcommand{\arraystretch}{1.5}
+ \begin{tabular}{|p{1cm}|p{ 1cm}|p{1cm}|p{1.5cm}|p{1.5cm}|}
+ \hline
+ {Class} & {Precesion}  & {Recall} & {f1-score}& {Number of sampeles}\\
+ \hline
+ Class0 & 0.98 & 0.93 & 0,95 & 17967\\
+ \hline
+ Class1 & 0.99& 0.88& 0.94& 1851\\
+ \hline
+ Class2 &0.97 & 0.99 & 0.98& 44982\\
+ \hline
+ avg/Tolat & 0.97 & 0.97  & 0.97 & 64800\\
+ \hline
+ \end{tabular}
+ \end{center}
+ \label{table:characteristics5}
+ \vspace{-5mm}
+ \end{table}
+
+
+ \begin{table}
+ \caption{Results of Deep Neural Network for test set with data augmentation}
+ \small
+ \begin{center}
+ \setlength{\tabcolsep}{0.8em}
+ \renewcommand{\arraystretch}{1.5}
+ \begin{tabular}{|p{1cm}|p{ 1cm}|p{1cm}|p{1.5cm}|p{1.5cm}|}
+ \hline
+ {Class} & {Precesion}  & {Recall} & {f1-score}& {Number of sampeles}\\
+ \hline
+ Class0 & 0.98 & 0.93 & 0,95 & 19792\\
+ \hline
+ Class1 & 0.99& 0.88 & 0,93 & 2040\\
+ \hline
+ Class2 & 0.97 & 0.99  & 0.98& 50168\\
+ \hline
+ avg/Tolat & 0.97 & 0.97  & 0.97 & 72000\\
+ \hline
+ \end{tabular}
+ \end{center}
+ \label{table:characteristics6}
+ \vspace{-5mm}
+ \end{table}
+
+ \section{Predicting the number of solutions for N Degree polynomials \label{section3}}
+ To achieve this, we are trying various parameters and architectures of Deep Neural Networks, but before arriving to this step we should first generate the data set of our model.
+ \subsection{Data generartion\label{data generation}}
+
+ The task of data preparation in this part is more complex than the former one because: first, instead of a simple classification problem (in the first part we had only three labels) we have regression problem, so we have to have the number of complex roots, the number of multiple roots and the number of single roots which is variable from one polynomial to the other. Second, we are giving the polynomial’s roots to generate its coefficients and not the polynomial’s coefficients to generate its root as the first part, because of this we cannot explore all the space of coefficient's values and do all the possible combination, this can affect the regression error. Furthermore, we are working with polynomials from different degree (from one to D degree), so the number of polynomials of degree 100 for example has to be bigger than the number of polynomial of degree 2 to give more information to our model. So, we are controling a lots of parameters at the same time to take different values of coefficients, different degrees and good data distribution as much as we can. To achieve this aim we did a python program that generates polynomials for a given degree by specifying the number of complex roots, number of square root, the interval of the roots and the number of polynomials of the given degree. Our data set has different polynomials from different degrees (from 1 to 100 degree).
+
+ \subsection{Fixed size representation of polynomails\label{evaluation}}
+
+ To train a Deep Neural network we should give it a fixed size input, here we arrived to a critical  problem with polynomials, because the number of coefficient of polynomial is changing from one to another depending in their degree, thus it cannot be an input to our model, this limitation  left us between two choices, the first one is working just with polynomials of the same degree and the later is to find a fixed size representation of polynomials. To do this we have replaced the polynomial’s coefficients by the polynomial’s evaluations. We evaluated each polynomial in defined interval at fixed number of points which are far from each others.
+
+ \subsection{Preprocessing Input Data\label{Preprocessing}}
+ The statistics of the input data can have a strong effect on network performance due to the existance of high and small values together. Because of this, element-wise standardization (subtract the mean and divide by the standard deviation) is applied to the evaluations before feeding them to the network.
+
+ \subsection{Neural Network Hyperparameters definition} \label{Hyperparameters}
+
+ The learning rate: it determines how quickly the gradient updates follows in the gradient’s direction. If the learning rate is very small, the model will converge too slowly, if the learning rate is too large, the model will diverge.
+
+ Mini-batch Size: theoreticlaly, the choice of it is mostly computational when B is larger, updates can be computed more efficiently due to the use of parallel architectures; when B is smaller, more updates can be made.
+
+ Number of Hidden Layers: hidden layers can allow the neural network to fit the training data arbitrarily well, we chose to work with two hidden layers because it gave the best results.
+
+ \subsection{Apply Principal Component Analysis to improve the results} \label{pca}
+ The main idea of principal component analysis (PCA) is to reduce the dimensionality of a data set consisting of many variables correlated with each other, either heavily or lightly, while retaining the variation present in the dataset, up to the maximum extent. The same is done by transforming the variables to a new set of variables, which are known as the principal components (or simply, the PCs) and are orthogonal, ordered such that the retention of variation present in the original variables decreases as we move down in the order. So, in this way, the 1st principal component retains maximum variation that was present in the original components. The principal components are the eigenvectors of a covariance matrix, and hence they are orthogonal. We have applied the PCA to the evaluation points to check whether this process improve our model’s performance or not.
+
+ \section{Experiments and discussion of the result \label{section4}}
+
+ We have chosen to start our experimentations from lowest degree to the highest one, we started with data set which has a polynomials up to ten degree, and in each time we are increasing the degree of our dataset by 10, the second dataset has a degree less than or equal to 20, the second dataset has a degree less than or equal to 30 and so on. Each dataset has one million polynomial. See Table \ref{table:characteristics7}.
+
+ \begin{table}
+ \caption{The experimentations setup}
+ \small
+ \begin{center}
+ \setlength{\tabcolsep}{0.8em}
+ \renewcommand{\arraystretch}{1.5}
+ \begin{tabular}{|p{3cm}|p{2.5cm}|}
+ \hline
+
+ {Caracteristique  }& {Value}\\
+ \hline
+ Number of dataset &  7 \\
+ \hline
+ Number of Polynomial in each dataset&  1 Million\\
+ \hline
+ Degree& until 70th degree\\
+ \hline
+ Number of evaluations point & 100  \\
+ \hline
+ Evaluation range& from -10000 to +10000 \\
+ \hline
+ Root range& from -100 to +100 \\
+ \hline
+ Training time for all the datasets & 100 min \\
+ \hline
+ Test time & less than a second\\
+ \hline
+ \end{tabular}
+ \end{center}
+ \label{table:characteristics7}
+ \vspace{-5mm}
+ \end{table}
+ We can see that the benefit of using ML methods for predicting the number of solutions in term of times, 7 datasets of 1 million polynomials each. Testing the number of solutions for a polynormial (test time) is done in less than a second. But unfortunately, we could not go to degrees more than 70 because of the storage conditions (until now).
+
+ \begin{table}
+ \caption{Results of Deep Neural Network for N degree}
+ \small
+ \begin{center}
+ \setlength{\tabcolsep}{0.8em}
+ \renewcommand{\arraystretch}{1.5}
+ \begin{tabular}{|p{1.9cm}|p{1.5cm}||p{1.5cm}||p{1.5cm}|}
+ \hline
+
+ {Experimentation }& {Degree} & {MAE without PCA}  & {MAE with PCA}\\
+ \hline
+ Exp1& 10 & 1.196 & 1.07 \\
+ \hline
+ Exp2& 20 & 2.109& 1.193\\
+ \hline
+ Exp3& 30 & 2.828 & 2.634\\
+ \hline
+ Exp4& 40& 3.372 &3.392  \\
+ \hline
+ Exp5& 50& 3. 3.979 & 4.034  \\
+ \hline
+ Exp6& 60&  16.143 & 16.117 \\
+ \hline
+ Exp7& 70& 19.125&  19.112  \\
+ \hline
+
+ \end{tabular}
+ \end{center}
+ \label{table:characteristics8}
+ \vspace{-5mm}
+ \end{table}
+
+
+ We applied the PCA technique for different number of 5 eigen vectors in the first experimentation, in the second one, we did it for 5 and 10  eigen vectors, in the third one, we did it for 5, 10 and 15 eigen vectors and so on . We found that the biggest number of eigen vectors always give us the minimum absolute  error which we have recorded it in Table \ref{table:characteristics8}. Also, from our experiments we conclude that PCA is useful if we have a good data distribution (like in first three experimentations) our data distribution can cover most of the space, thus the PCA can improve the results, otherwise there is no benefit, as the degree increases the PCA is worse than the normal execution because this evaluations does not cover a big class of polynomials of high degree. Because we are not the coefficients values (we generate coefficients from roots and not the inverse).
+ We can see that the regression error is acceptable until 50th degree, after that MAE (mean absolute error) is getting high, we expect that the problem is due to the data distribution, because we are not covering a big space of coefficient’s values, currently we are working to solve this problem and redo all the experiments.
+
+
+ \section{Conclusion}\label{section5}
+ Until now we conclude that ML methods can be an efficient tools in predicting the number of possible solutions for a polynomial in fixed time. However it has a lot of challenge that we should deal with, among them we find: first, collecting the data that should cover all the space of polynomial’s coefficients, second find a fixed size representations of polynomial to give it as input to the ML model, and finally fixed the good hyper parameters values that can improve the results.
+ In the few next weeks, we aim to generate our data by a new way, that gives the polynomial’s  coefficients to generate its  root and the reverse way, this let our model to explore larger space of coefficient values and has better distribution of data. Once we do this we will redo all the experiments  using PCA to minimize the mean absolute error of our Deep Neural Network model.
+
+
+\appendix
+\section{Morbi eros magna}
+
+Morbi eros magna, vestibulum non posuere non, porta eu quam. Maecenas vitae orci risus, eget imperdiet mauris. Donec massa mauris, pellentesque vel lobortis eu, molestie ac turpis. Sed condimentum convallis dolor, a dignissim est ultrices eu. Donec consectetur volutpat eros, et ornare dui ultricies id. Vivamus eu augue eget dolor euismod ultrices et sit amet nisi. Vivamus malesuada leo ac leo ullamcorper tempor. Donec justo mi, tempor vitae aliquet non, faucibus eu lacus. Donec dictum gravida neque, non porta turpis imperdiet eget. Curabitur quis euismod ligula.
+
+
+%%
+%% Bibliography
+%%
+
+%% Please use bibtex,
+
+\bibliography{lipics-v2016-sample-article}
+
+
+\end{document}
